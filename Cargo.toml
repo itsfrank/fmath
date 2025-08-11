@@ -1,0 +1,15 @@
+[package]
+name = "fmath"
+version = "0.1.0"
+edition = "2024"
+description = "frank's math library"
+
+[dependencies]
+enum_dispatch = "0.3.13"
+
+[dev-dependencies]
+approx = "0.5.1"
+
+[workspace]
+members = [".", "playground"]
+
