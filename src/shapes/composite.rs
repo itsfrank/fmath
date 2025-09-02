@@ -1,19 +1,11 @@
-use crate::{impl_positioned_trait, Positioned, Shape, Xform};
+use crate::{impl_positioned_trait, Color, Colored, Positioned, Shape, Xform};
 use std::slice::Iter;
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Composite {
     pub xform: Xform,
-    shapes: Vec<Shape>,
-}
-
-impl Default for Composite {
-    fn default() -> Self {
-        Self {
-            xform: Xform::default(),
-            shapes: Vec::new(),
-        }
-    }
+    pub color: Option<Color>,
+    pub shapes: Vec<Shape>,
 }
 
 impl Composite {
@@ -21,17 +13,15 @@ impl Composite {
         self.shapes.iter()
     }
 }
-// impl Drawable for Composite {
-//     fn draw(&self, d: &mut impl RaylibDraw) {
-//         self.shapes
-//             .iter()
-//             .map(|s| {
-//                 let mut s: Shape = s.clone();
-//                 s.update_xform(self.xform);
-//                 s
-//             })
-//             .for_each(|s| s.draw(d));
-//     }
-// }
 
 impl_positioned_trait!(Composite);
+
+impl Colored for Composite {
+    fn get_color(&self) -> Color {
+        self.color.unwrap_or_default() // could we do better here?
+    }
+
+    fn set_color(&mut self, new: Color) {
+        self.color = Some(new)
+    }
+}

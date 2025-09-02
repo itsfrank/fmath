@@ -1,4 +1,4 @@
-use crate::{impl_positioned_trait, Color, Positioned, Vec2, Xform};
+use crate::{impl_colored_trait, impl_positioned_trait, Color, Colored, Positioned, Vec2, Xform};
 
 #[derive(Debug, Clone)]
 pub struct Rect {
@@ -63,15 +63,33 @@ impl IntoIterator for RectCorners {
 
 impl Rect {
     pub fn corners(&self) -> RectCorners {
-        let wh = Vec2::new(self.width / 2., self.height / 2.);
-        let wmh = Vec2::new(self.width / 2., -self.height / 2.);
+        let w = self.width * self.xform.scale;
+        let h = self.height * self.xform.scale;
+        let wh = Vec2::new(w / 2., h / 2.);
+        let wmh = Vec2::new(w / 2., -h / 2.);
 
-        RectCorners {
-            tr: self.xform.pos + wmh,
-            bl: self.xform.pos - wmh,
-            tl: self.xform.pos - wh,
-            br: self.xform.pos + wh,
+        let mut corners = RectCorners {
+            tr: wmh,
+            bl: wmh * -1.,
+            tl: wh * -1.,
+            br: wh,
+        };
+
+        // apply rotation
+        if self.xform.rot != crate::Angle::zero() {
+            corners.tl = corners.tl.rotate_cw(self.xform.rot);
+            corners.tr = corners.tr.rotate_cw(self.xform.rot);
+            corners.br = corners.br.rotate_cw(self.xform.rot);
+            corners.bl = corners.bl.rotate_cw(self.xform.rot);
         }
+
+        // apply pos
+        corners.tl = corners.tl + self.xform.pos;
+        corners.tr = corners.tr + self.xform.pos;
+        corners.br = corners.br + self.xform.pos;
+        corners.bl = corners.bl + self.xform.pos;
+
+        corners
     }
 }
 
@@ -108,6 +126,7 @@ impl Rect {
 // }
 
 impl_positioned_trait!(Rect);
+impl_colored_trait!(Rect);
 
 #[cfg(test)]
 mod test {

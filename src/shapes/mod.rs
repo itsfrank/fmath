@@ -8,7 +8,7 @@ pub use composite::*;
 pub use rect::*;
 pub use triangle::*;
 
-use crate::Xform;
+use crate::{Color, Xform};
 
 use enum_dispatch::enum_dispatch;
 
@@ -28,6 +28,12 @@ pub trait Positioned {
     fn apply_xform(&mut self, delta: Xform);
 }
 
+#[enum_dispatch(Shape)]
+pub trait Colored {
+    fn get_color(&self) -> Color;
+    fn set_color(&mut self, new: Color);
+}
+
 #[macro_export]
 macro_rules! impl_positioned_trait {
     ($struct: ident) => {
@@ -40,6 +46,20 @@ macro_rules! impl_positioned_trait {
             }
             fn apply_xform(&mut self, delta: Xform) {
                 self.xform = self.xform.apply(delta);
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! impl_colored_trait {
+    ($struct: ident) => {
+        impl Colored for $struct {
+            fn get_color(&self) -> Color {
+                self.color
+            }
+            fn set_color(&mut self, new: Color) {
+                self.color = new;
             }
         }
     };

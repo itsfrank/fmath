@@ -17,7 +17,7 @@ impl Color {
     }
 }
 
-// shamlessly taken from raylib-rs core/color.rs
+// taken from raylib-rs core/color.rs with a small degree of shame
 impl Color {
     pub const INDIANRED: Color = Color::from_rgb(205, 92, 92);
     pub const LIGHTCORAL: Color = Color::from_rgb(240, 128, 128);
