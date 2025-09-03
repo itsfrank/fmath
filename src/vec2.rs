@@ -166,12 +166,12 @@ mod tests {
     fn rotations() {
         let v1 = Vec2::from((3., 2.));
         let v2 = v1.rotate_cw(Angle::from_deg(90.));
-        assert_relative_eq!(v2.x, 2.);
-        assert_relative_eq!(v2.y, -3.);
+        assert_relative_eq!(v2.x, -2.);
+        assert_relative_eq!(v2.y, 3.);
 
         let v3 = v1.rotate_ccw(Angle::from_deg(90.));
-        assert_relative_eq!(v3.x, -2.);
-        assert_relative_eq!(v3.y, 3.);
+        assert_relative_eq!(v3.x, 2.);
+        assert_relative_eq!(v3.y, -3.);
 
         let about = Vec2::from((1., 1.));
         let v4 = v1.rotate_about_cw(Angle::from_deg(90.), about);
